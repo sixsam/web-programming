@@ -1,11 +1,11 @@
 import argparse,time,socket
 
-aphorisms={b'beautiful is better than?':b'ugly',
-           b'explicit is better than?':b'implicit',
-           b'simple is better than?':b'complex'}
+aphorisms={b'beautiful is better than?':b'ugly.',
+           b'explicit is better than?':b'implicit.',
+           b'simple is better than?':b'complex.'}
 def get_answer(aphorism):
     time.sleep(0.0)
-    return aphorisms.get(aphorism),b'error:unknown aphorism.'
+    return aphorisms.get(aphorism,b'error:unknown aphorism.')
 
 def parse_command_line(description):
     parser=argparse.ArgumentParser(description=description)
@@ -16,7 +16,7 @@ def parse_command_line(description):
     return address
 
 def create_srv_socket(address):
-    listener=socket.socket(socket.AF_INET,socket.SOCL_STREAM)
+    listener=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
     listener.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1)
     listener.bind(address)
     listener.listen(64)
@@ -50,7 +50,7 @@ def recv_until(sock,suffix):
     if not message:
         raise EOFError('socket closed')
     while not message.endswith(suffix):
-        data=sock.recv(2096)
+        data=sock.recv(4096)
         if not data:
             raise IOError('received {!r} then socket closed'.format(message))
         message+=data
